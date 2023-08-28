@@ -8,12 +8,13 @@ import 'virtual:svg-icons-register'
 import globalComponent from '@/components'
 // 引入全局样式
 import '@/styles/index.scss'
-
-import ''
+// 引入路由
+import { Route } from './router'
 
 const app = createApp(App)
 
 app.use(ElementPlus)
+app.use(Route)
 // 安装自定义插件
 app.use(globalComponent)
 app.mount('#app')
