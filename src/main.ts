@@ -9,12 +9,12 @@ import globalComponent from '@/components'
 // 引入全局样式
 import '@/styles/index.scss'
 // 引入路由
-import { Route } from './router'
+import Router from './router'
 
 const app = createApp(App)
 
 app.use(ElementPlus)
-app.use(Route)
+app.use(Router)
 // 安装自定义插件
 app.use(globalComponent)
 app.mount('#app')
