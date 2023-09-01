@@ -18,8 +18,9 @@ button {
   margin: 4px;
   border-radius: 25%;
   transition: 0.2s;
+  border: 0;
   .svg-icon {
-    color: var(--color-text);
+    color: #fff;
     height: 16px;
     width: 16px;
   }
@@ -27,7 +28,7 @@ button {
     margin-left: 0;
   }
   &:hover {
-    background: var(--color-secondary-bg-for-transparent);
+    background: rgba(209, 209, 214, 0.28);
   }
   &:active {
     transform: scale(0.92);
