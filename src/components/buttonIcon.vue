@@ -16,7 +16,7 @@ button {
   padding: 8px;
   background: transparent;
   margin: 4px;
-  border-radius: 25%;
+  border-radius: 10px;
   transition: 0.2s;
   border: 0;
   .svg-icon {

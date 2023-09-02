@@ -6,6 +6,12 @@ const routes = [
     component: () => import('@/views/home.vue'),
     name: 'layout',
   },
+  // 任意路由
+  {
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/views/home.vue'),
+    name: 'layout',
+  },
 ]
 
 const Router = createRouter({

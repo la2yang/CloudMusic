@@ -1,16 +1,17 @@
 <template>
   <div class="home">
-    <buttonIcon>111</buttonIcon>
+    <navbar />
   </div>
 </template>
 
 <script setup lang="ts">
-import buttonIcon from '@/components/ButtonIcon.vue'
+import navbar from '@/components/Navbar.vue'
 </script>
 
 <style scoped lang="scss">
-div {
-  border: 5px solid;
-  border-color: $theme-color;
+* {
+  width: 100vw;
+  height: 100vh;
+  background-color: #802121;
 }
 </style>
