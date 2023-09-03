@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 import navbar from '@/components/Navbar.vue'
+import Player from '@/components/Player.vue'
 </script>
 
 <style scoped lang="scss">

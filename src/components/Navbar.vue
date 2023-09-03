@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="Navbar">
     <div class="navigation-arrow">
       <ButtonIcon>
         <el-icon><ArrowLeftBold /></el-icon>
@@ -20,23 +20,31 @@
       </ButtonIcon>
     </div>
     <div class="right-content">
-      <div class="search-box">
-        <div class="input">
-          <el-icon><Search /></el-icon>
-          <input ref="searchInput" type="search" placeholder="搜索" />
-        </div>
+      <div class="search-box" :class="{ active: isFocused }">
+        <SvgIcon class="search-icon" name="search"></SvgIcon>
+        <input
+          ref="searchInput"
+          type="search"
+          :placeholder="isFocused ? '' : '搜索'"
+          @focus="isFocused = true"
+          @blur="isFocused = false"
+        />
       </div>
-      <ButtonIcon class="avatar">头像</ButtonIcon>
+      <img class="avatar" src="../assets/images/avatar.png" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import ButtonIcon from './ButtonIcon.vue'
+import SvgIcon from './SvgIcon.vue'
+
+let isFocused = ref(false)
 </script>
 
 <style scoped lang="scss">
-.container {
+.Navbar {
   position: fixed;
   top: 0;
   right: 0;
@@ -45,7 +53,7 @@ import ButtonIcon from './ButtonIcon.vue'
   justify-content: space-between;
   align-items: center;
   height: 64px;
-  background-color: #fff;
+  background-color: #ab6868;
   padding: {
     right: 10vw;
     left: 10vw;
@@ -59,14 +67,14 @@ import ButtonIcon from './ButtonIcon.vue'
 }
 
 .navigation-arrow {
-  display: flex;
   flex: 1;
+  display: flex;
   align-items: left;
 }
 
 .navigation {
-  flex: 1;
   display: flex;
+  flex: 1;
   justify-content: center;
   text-transform: uppercase;
   user-select: none;
@@ -85,13 +93,53 @@ import ButtonIcon from './ButtonIcon.vue'
 .right-content {
   display: flex;
   flex: 1;
-  justify-self: end;
-}
+  justify-content: end;
 
-.search-box {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  .search-box {
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    width: 200px;
+    background-color: #f2f2f4;
+    border-radius: 8px;
+
+    .search-icon {
+      height: 15px;
+      width: 15px;
+      color: #aeaeaf;
+      margin: {
+        left: 8px;
+        right: 4px;
+      }
+    }
+
+    input {
+      font-size: 16px;
+      border: none;
+      background: transparent;
+      width: 96%;
+      font-weight: 600;
+    }
+  }
+
+  .active {
+    background: #e1e8e6;
+    input,
+    .search-icon {
+      opacity: 1;
+      color: #1ecd99;
+    }
+  }
+
+  .avatar {
+    height: 30px;
+    margin-left: 12px;
+    vertical-align: -7px;
+    border-radius: 50%;
+    cursor: pointer;
+    &:hover {
+      filter: brightness(80%);
+    }
+  }
 }
 </style>
