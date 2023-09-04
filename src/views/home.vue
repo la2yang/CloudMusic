@@ -1,6 +1,8 @@
 <template>
   <div class="home">
     <navbar />
+    <img src="@/assets/images/avatar.png" alt="" srcset="" />
+    <Player />
   </div>
 </template>
 
@@ -13,6 +15,9 @@ import Player from '@/components/Player.vue'
 * {
   width: 100vw;
   height: 100vh;
-  background-color: #802121;
+  // background-color: #802121;
+}
+.home {
+  padding-top: 64px;
 }
 </style>

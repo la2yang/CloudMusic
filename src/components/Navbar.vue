@@ -53,7 +53,8 @@ let isFocused = ref(false)
   justify-content: space-between;
   align-items: center;
   height: 64px;
-  background-color: #ab6868;
+  background-color: #fff;
+  opacity: 0.85;
   padding: {
     right: 10vw;
     left: 10vw;
