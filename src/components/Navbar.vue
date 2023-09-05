@@ -105,9 +105,7 @@ let isFocused = ref(false)
     border-radius: 8px;
 
     .search-icon {
-      height: 15px;
-      width: 15px;
-      color: #aeaeaf;
+      color: #d1d1d3;
       margin: {
         left: 8px;
         right: 4px;
@@ -124,11 +122,11 @@ let isFocused = ref(false)
   }
 
   .active {
-    background: #e1e8e6;
+    background: #eaefed;
     input,
     .search-icon {
       opacity: 1;
-      color: #1ecd99;
+      color: $active-color;
     }
   }
 

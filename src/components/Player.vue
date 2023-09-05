@@ -8,12 +8,45 @@
           <a class="music-name">没有名字的夜晚</a>
           <a class="singer">作者</a>
         </div>
-        <ButtonIcon class="like-icon">
-          <SvgIcon class="heart" name="heart"></SvgIcon>
+        <ButtonIcon class="like-icon" @click="isLiked = !isLiked">
+          <SvgIcon
+            class="heart"
+            :name="isLiked ? 'heart-solid' : 'heart'"
+          ></SvgIcon>
         </ButtonIcon>
       </div>
-      <div class="middle-control-button"></div>
-      <div class="right-control-button"></div>
+      <div class="middle-control-button">
+        <ButtonIcon class="button-icon">
+          <SvgIcon class="front" name="front"></SvgIcon>
+        </ButtonIcon>
+        <ButtonIcon class="button-icon">
+          <SvgIcon
+            class="play"
+            :name="isPlaying ? 'play' : 'pause'"
+            :style="{ width: '24px', height: '24px' }"
+            @click="isPlaying = !isPlaying"
+          ></SvgIcon>
+        </ButtonIcon>
+        <ButtonIcon class="button-icon">
+          <SvgIcon class="front" name="next"></SvgIcon>
+        </ButtonIcon>
+      </div>
+      <div class="right-control-button">
+        <ButtonIcon class="button-icon">
+          <SvgIcon class="front" name="list"></SvgIcon>
+        </ButtonIcon>
+        <ButtonIcon class="button-icon">
+          <SvgIcon class="front" name="repeat"></SvgIcon>
+        </ButtonIcon>
+        <ButtonIcon class="button-icon">
+          <SvgIcon class="front" name="shuffle"></SvgIcon>
+        </ButtonIcon>
+        <div class="volume-control">
+          <ButtonIcon class="button-icon">
+            <SvgIcon class="front" name="volume"></SvgIcon>
+          </ButtonIcon>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -21,6 +54,11 @@
 <script setup lang="ts">
 import SvgIcon from './SvgIcon.vue'
 import ButtonIcon from './ButtonIcon.vue'
+import { ref } from 'vue'
+
+const isLiked = ref(true)
+const isPlaying = ref(false)
+const volume = ref(10)
 </script>
 
 <style scoped lang="scss">
@@ -28,6 +66,8 @@ import ButtonIcon from './ButtonIcon.vue'
   position: fixed;
   bottom: 0;
   height: 64px;
+  width: 100vw;
+
   background-color: #fff;
   opacity: 0.85;
 }
@@ -59,52 +99,61 @@ import ButtonIcon from './ButtonIcon.vue'
   display: flex;
   display: flex;
   align-items: center;
-  .music-cover {
-    height: 46px;
-    border-radius: 5px;
-    box-shadow: 0 6px 8px -2px rgba(0, 0, 0, 0.16);
+}
+.music-cover {
+  height: 46px;
+  border-radius: 5px;
+  box-shadow: 0 6px 8px -2px rgba(0, 0, 0, 0.16);
+  cursor: pointer;
+  user-select: none;
+}
+.music-info {
+  height: 46px;
+  margin-left: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .music-name {
+    font-weight: 600;
+    font-size: 16px;
+    opacity: 0.88;
+    color: var(--color-text);
+    margin-bottom: 8px;
+    overflow: hidden;
+    word-break: break-all;
     cursor: pointer;
-    user-select: none;
-  }
-  .music-info {
-    height: 46px;
-    margin-left: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    .music-name {
-      font-weight: 600;
-      font-size: 16px;
-      opacity: 0.88;
-      color: var(--color-text);
-      margin-bottom: 8px;
-      overflow: hidden;
-      word-break: break-all;
-      cursor: pointer;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-    .singer {
-      font-size: 12px;
-      opacity: 0.58;
-      color: var(--color-text);
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      overflow: hidden;
-      cursor: pointer;
-      &:hover {
-        text-decoration: underline;
-      }
+    &:hover {
+      text-decoration: underline;
     }
   }
-  .like-icon {
-    width: 32px;
-    height: 32px;
-    .heart {
-      height: 16px;
+  .singer {
+    font-size: 12px;
+    opacity: 0.58;
+    color: var(--color-text);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
     }
   }
+}
+.like-icon {
+  margin-left: 8px;
+  width: 32px;
+  height: 32px;
+  transition: 0.2s;
+  .heart {
+    height: 16px;
+  }
+}
+
+.middle-control-button,
+.right-control-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
