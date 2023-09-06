@@ -45,15 +45,28 @@
           <ButtonIcon class="button-icon">
             <SvgIcon class="front" name="volume"></SvgIcon>
           </ButtonIcon>
+          <div class="volume-slider">
+            <vue-slider
+              v-model="volume"
+              :min="0"
+              :max="100"
+              :interval="1"
+            ></vue-slider>
+          </div>
         </div>
+        <ButtonIcon class="button-icon">
+          <SvgIcon class="front" name="arrow-up"></SvgIcon>
+        </ButtonIcon>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import '@/styles/slider.scss'
 import SvgIcon from './SvgIcon.vue'
 import ButtonIcon from './ButtonIcon.vue'
+import VueSlider from 'vue-slider-component'
 import { ref } from 'vue'
 
 const isLiked = ref(true)
@@ -129,7 +142,6 @@ const volume = ref(10)
   .singer {
     font-size: 12px;
     opacity: 0.58;
-    color: var(--color-text);
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
@@ -141,19 +153,31 @@ const volume = ref(10)
   }
 }
 .like-icon {
-  margin-left: 8px;
-  width: 32px;
-  height: 32px;
+  margin-left: 5px;
   transition: 0.2s;
   .heart {
     height: 16px;
   }
 }
 
-.middle-control-button,
-.right-control-button {
+.middle-control-button {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.right-control-button {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  width: 100px;
+  margin-right: 5px;
+  .volume-slider {
+    width: 100px;
+  }
 }
 </style>
