@@ -1,15 +1,19 @@
 <template>
-  <navbar />
-  <div class="main">
-    <RouterView></RouterView>
-    <TrackItem />
+  <div class="home">
+    <navbar />
+    <div class="main">
+      <RouterView></RouterView>
+      <library />
+      <TrackItem />
+    </div>
+    <Player />
   </div>
-  <Player />
 </template>
 
 <script setup lang="ts">
-import Navbar from '@/components/Navbar.vue'
+import navbar from '@/components/Navbar.vue'
 import Player from '@/components/Player.vue'
+import library from './library.vue'
 import TrackItem from '@/components/TrackItem.vue'
 </script>
 

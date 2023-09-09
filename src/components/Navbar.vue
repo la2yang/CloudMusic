@@ -2,10 +2,13 @@
   <div class="Navbar">
     <div class="navigation-arrow">
       <ButtonIcon>
-        <el-icon><ArrowLeftBold /></el-icon>
+        <SvgIcon :style="{ width: 24, height: 24 }" name="arrow-left"></SvgIcon>
       </ButtonIcon>
       <ButtonIcon>
-        <el-icon><ArrowRightBold /></el-icon>
+        <SvgIcon
+          :style="{ width: 24, height: 24 }"
+          name="arrow-right"
+        ></SvgIcon>
       </ButtonIcon>
     </div>
     <div class="navigation">
@@ -13,10 +16,10 @@
         <router-link to="/home">首页</router-link>
       </ButtonIcon>
       <ButtonIcon class="explore">
-        <router-link to="/home">发现</router-link>
+        <router-link to="/explore">发现</router-link>
       </ButtonIcon>
       <ButtonIcon class="library">
-        <router-link to="/home">音乐库</router-link>
+        <router-link to="/library">音乐库</router-link>
       </ButtonIcon>
     </div>
     <div class="right-content">
@@ -54,15 +57,15 @@ let isFocused = ref(false)
   align-items: center;
   height: 64px;
   background-color: #fff;
-  opacity: 0.85;
+  opacity: 0.9;
+  backdrop-filter: blur(10px);
   padding: {
     right: 10vw;
     left: 10vw;
   }
 }
-
 @media (max-width: 1336px) {
-  .container {
+  .Navbar {
     padding: 0 5vw;
   }
 }
@@ -71,6 +74,10 @@ let isFocused = ref(false)
   flex: 1;
   display: flex;
   align-items: left;
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .navigation {
@@ -85,9 +92,6 @@ let isFocused = ref(false)
     text-decoration: none;
     border-radius: 6px;
     color: black;
-    &:active {
-      color: $active-color;
-    }
   }
 }
 

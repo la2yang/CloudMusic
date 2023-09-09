@@ -105,7 +105,10 @@ const volume = ref(10)
 
 @media (max-width: 1336px) {
   .controls {
-    padding: 0 5vw;
+    padding: {
+      right: 5vw;
+      left: 5vw;
+    }
   }
 }
 .playing {

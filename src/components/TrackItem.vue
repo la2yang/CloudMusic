@@ -6,7 +6,8 @@
       <a class="singer">歌手</a>
     </div>
     <div class="album">专辑名称</div>
-    <div class="liked">
+    <div class="controls-icon">
+      <SvgIcon class="play-icon" name="play"></SvgIcon>
       <SvgIcon name="heart" />
     </div>
     <div class="time">3:45</div>
@@ -32,7 +33,10 @@ import SvgIcon from './SvgIcon.vue'
   }
 
   &:hover {
-    background-color: #bddbc4;
+    background-color: #efefef;
+    .controls-icon {
+      opacity: 1;
+    }
   }
 }
 
@@ -45,6 +49,7 @@ import SvgIcon from './SvgIcon.vue'
     font-size: 18px;
     font-weight: 600;
     overflow: hidden;
+    cursor: default;
     word-break: break-all;
   }
 
@@ -52,10 +57,11 @@ import SvgIcon from './SvgIcon.vue'
     margin-top: 8px;
     font-size: 13px;
     opacity: 0.68;
+    width: fit-content;
     cursor: pointer;
-
     &:hover {
       text-decoration: underline;
+      color: $active-color;
     }
   }
 }
@@ -63,28 +69,37 @@ import SvgIcon from './SvgIcon.vue'
   flex: 1;
   font-size: 16px;
   cursor: pointer;
-
+  width: fit-content;
   &:hover {
     text-decoration: underline;
+    color: $active-color;
   }
 }
 
-.liked {
-  width: 80px;
+.controls-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.2s;
-  &:hover {
-    transform: scale(1.2);
-  }
+  opacity: 0;
+  svg {
+    margin-right: 10px;
+    transition: 0.2s;
+    cursor: pointer;
+    &:hover {
+      transform: scale(1.2);
+    }
 
-  &:active {
-    transform: scale(0.9);
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+  .play-icon {
+    color: $active-color;
   }
 }
 
 .time {
   width: 50px;
+  margin-left: 20px;
 }
 </style>
