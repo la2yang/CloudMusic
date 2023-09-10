@@ -3,14 +3,34 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    component: () => import('@/views/home.vue'),
+    component: () => import('@/views/library.vue'),
     name: 'layout',
+  },
+  {
+    path: '/library',
+    component: () => import('@/views/library.vue'),
+    name: 'library',
+  },
+  {
+    path: '/explore',
+    component: () => import('@/views/explore.vue'),
+    name: 'explore',
+  },
+  {
+    path: '/home',
+    component: () => import('@/views/home.vue'),
+    name: 'home',
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/login.vue'),
+    name: 'login',
   },
   // 任意路由
   {
     path: '/:pathMatch(.*)*',
-    component: () => import('@/views/home.vue'),
-    name: 'layout',
+    component: () => import('@/views/404.vue'),
+    name: 'any',
   },
 ]
 

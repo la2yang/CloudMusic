@@ -1,11 +1,11 @@
 // axios二次封装: 使用请求与响应拦截器
 import axios from 'axios'
-import { ElMessage } from 'Element-plus'
 
+const baseURL = 'https://net-music-api-sage.vercel.app/'
 //第一步: 利用axios的create方法,创建axios实例(配置:基础路径, 超时时间)
 const request = axios.create({
-  baseURL: import.meta.env.VITE_APP_BASE_API, // 基础路径上会携带/api
-  timeout: 5000, // 超时时间的设置
+  baseURL: baseURL, // 基础路径上会携带/api
+  timeout: 10000, // 超时时间的设置
 })
 
 // 请求拦截器
@@ -42,10 +42,6 @@ request.interceptors.response.use(
       default:
         msg = '无网络'
     }
-    ElMessage({
-      type: 'error',
-      message: msg,
-    })
     return Promise.reject(error)
   },
 )
