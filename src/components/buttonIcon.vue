@@ -17,6 +17,7 @@ button {
   border-radius: 10px;
   transition: 0.2s;
   border: 0;
+  font-weight: inherit;
   .svg-icon {
     color: #fff;
     height: 16px;
