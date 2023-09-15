@@ -1,16 +1,18 @@
 // axios二次封装: 使用请求与响应拦截器
 import axios from 'axios'
 
-const baseURL = 'https://net-music-api-sage.vercel.app/'
 //第一步: 利用axios的create方法,创建axios实例(配置:基础路径, 超时时间)
 const request = axios.create({
-  baseURL: baseURL, // 基础路径上会携带/api
+  baseURL: 'api', // 基础路径上会携带/api
+  withCredentials: true,
   timeout: 10000, // 超时时间的设置
 })
 
 // 请求拦截器
 request.interceptors.request.use((config) => {
+  // if (!config.params) config.params = {}
   // config配置对象, headers属性请求头,经常给服务器携带公共参数
+  // config.params.cookie = cookie
   //返回配置对象
   return config
 })
