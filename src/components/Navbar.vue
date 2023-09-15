@@ -12,15 +12,16 @@
       </ButtonIcon>
     </div>
     <div class="navigation">
-      <ButtonIcon class="home">
-        <router-link to="/home">首页</router-link>
-      </ButtonIcon>
-      <ButtonIcon class="explore">
-        <router-link to="/explore">发现</router-link>
-      </ButtonIcon>
-      <ButtonIcon class="library">
-        <router-link to="/library">音乐库</router-link>
-      </ButtonIcon>
+      <router-link to="/home">
+        <ButtonIcon class="home">首页</ButtonIcon>
+      </router-link>
+      <router-link to="/explore">
+        <ButtonIcon class="explore">发现</ButtonIcon>
+      </router-link>
+
+      <router-link to="/library">
+        <ButtonIcon class="library">音乐库</ButtonIcon>
+      </router-link>
     </div>
     <div class="right-content">
       <div class="search-box" :class="{ active: isFocused }">
@@ -33,17 +34,39 @@
           @blur="isFocused = false"
         />
       </div>
-      <img class="avatar" src="../assets/images/avatar.png" />
+      <div class="avatar">
+        <img class="avatar-img" :src="avatar()" @click="showAvatarMenu()" />
+        <AvatarMenu ref="avatarMenu"></AvatarMenu>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import useUserStore from '@/store/user'
+
 import ButtonIcon from './ButtonIcon.vue'
 import SvgIcon from './SvgIcon.vue'
+import AvatarMenu from './AvatarMenu.vue'
 
+// 搜索框聚焦
 let isFocused = ref(false)
+
+// 触发子组件中的方法
+const avatarMenu = ref()
+const showAvatarMenu = () => {
+  avatarMenu.value.openMenu()
+}
+
+const avatar = () => {
+  return (
+    userStore.user.avatarUrl ||
+    'http://s4.music.126.net/style/web2/img/default/default_avatar.jpg?param=60y60'
+  )
+}
+
+const userStore = useUserStore()
 </script>
 
 <style scoped lang="scss">
@@ -58,7 +81,8 @@ let isFocused = ref(false)
   height: 64px;
   background-color: #fff;
   opacity: 0.9;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px);
+  z-index: 100;
   padding: {
     right: 10vw;
     left: 10vw;
@@ -92,6 +116,9 @@ let isFocused = ref(false)
     text-decoration: none;
     border-radius: 6px;
     color: black;
+    ButtonIcon {
+      font-weight: 700;
+    }
   }
 }
 
@@ -99,50 +126,53 @@ let isFocused = ref(false)
   display: flex;
   flex: 1;
   justify-content: end;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  width: 200px;
+  background-color: #f2f2f4;
+  border-radius: 8px;
 
-  .search-box {
-    display: flex;
-    align-items: center;
-    justify-self: center;
-    width: 200px;
-    background-color: #f2f2f4;
-    border-radius: 8px;
-
-    .search-icon {
-      color: #d1d1d3;
-      margin: {
-        left: 8px;
-        right: 4px;
-      }
-    }
-
-    input {
-      font-size: 16px;
-      border: none;
-      background: transparent;
-      width: 96%;
-      font-weight: 600;
+  .search-icon {
+    color: #d1d1d3;
+    margin: {
+      left: 8px;
+      right: 4px;
     }
   }
 
-  .active {
-    background: #eaefed;
-    input,
-    .search-icon {
-      opacity: 1;
-      color: $active-color;
-    }
+  input {
+    font-size: 16px;
+    border: none;
+    background: transparent;
+    width: 96%;
+    font-weight: 600;
   }
+}
 
-  .avatar {
-    height: 30px;
-    margin-left: 12px;
-    vertical-align: -7px;
-    border-radius: 50%;
-    cursor: pointer;
-    &:hover {
-      filter: brightness(80%);
-    }
+.active {
+  background: #eaefed;
+  input,
+  .search-icon {
+    opacity: 1;
+    color: $active-color;
+  }
+}
+
+.avatar {
+  position: relative;
+}
+
+.avatar-img {
+  height: 30px;
+  margin-left: 12px;
+  vertical-align: -7px;
+  border-radius: 50%;
+  cursor: pointer;
+  &:hover {
+    filter: brightness(80%);
   }
 }
 </style>
