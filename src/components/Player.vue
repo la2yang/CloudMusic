@@ -1,6 +1,26 @@
 <template>
   <div class="player">
-    <div class="progress-bar"></div>
+    <div class="progress-bar">
+      <audio
+        ref="audioPlayer"
+        @timeupdate="updateProgress"
+        src="http://m8.music.126.net/20230915234203/2cbf8e79f6b893a19bb4690804cf6182/ymusic/0fd6/4f65/43ed/a8772889f38dfcb91c04da915b301617.mp3"
+      ></audio>
+      <vue-slider
+        v-model="player.currentTime"
+        :min="0"
+        :max="120"
+        :interval="1"
+        :drag-on-click="true"
+        :duration="0"
+        :dot-size="12"
+        :height="3"
+        style="margin-top: -6px"
+        :tooltip-formatter="null"
+        :lazy="true"
+        :silent="true"
+      ></vue-slider>
+    </div>
     <div class="controls">
       <div class="playing">
         <img class="music-cover" src="@/assets/images/avatar.png" />
@@ -8,10 +28,10 @@
           <a class="music-name">没有名字的夜晚</a>
           <a class="singer">作者</a>
         </div>
-        <ButtonIcon class="like-icon" @click="isLiked = !isLiked">
+        <ButtonIcon class="like-icon" @click="player.isLiked = !player.isLiked">
           <SvgIcon
             class="heart"
-            :name="isLiked ? 'heart-solid' : 'heart'"
+            :name="player.isLiked ? 'heart-solid' : 'heart'"
           ></SvgIcon>
         </ButtonIcon>
       </div>
@@ -22,9 +42,9 @@
         <ButtonIcon class="button-icon">
           <SvgIcon
             class="play"
-            :name="isPlaying ? 'play' : 'pause'"
+            :name="player.isPlaying ? 'play' : 'pause'"
             :style="{ width: '24px', height: '24px' }"
-            @click="isPlaying = !isPlaying"
+            @click="player.isPlaying = !player.isPlaying"
           ></SvgIcon>
         </ButtonIcon>
         <ButtonIcon class="button-icon">
@@ -47,7 +67,7 @@
           </ButtonIcon>
           <div class="volume-slider">
             <vue-slider
-              v-model="volume"
+              v-model="player.volume"
               :min="0"
               :max="100"
               :interval="1"
@@ -64,33 +84,59 @@
 
 <script setup lang="ts">
 import '@/styles/slider.scss'
-import SvgIcon from './SvgIcon.vue'
+import { reactive, ref, watch } from 'vue'
+
 import ButtonIcon from './ButtonIcon.vue'
 import VueSlider from 'vue-slider-component'
-import { ref } from 'vue'
 
-const isLiked = ref(true)
-const isPlaying = ref(false)
-const volume = ref(10)
+const player = reactive({
+  // 是否喜爱
+  isLiked: true,
+  // 是否播放
+  isPlaying: false,
+  // 音量
+  volume: 10,
+  // 当前播放进度
+  currentTime: 0,
+})
+
+const audioPlayer = ref(null)
+
+const playMusic = () => {
+  audioPlayer.value.play()
+}
+
+const pauseMusic = () => {
+  audioPlayer.value.pause()
+}
+
+watch(player, () => {
+  if (player.isPlaying) {
+    pauseMusic()
+  } else {
+    playMusic()
+  }
+})
+
+const updateProgress = () => {
+  player.currentTime = audioPlayer.value.currentTime
+}
 </script>
 
 <style scoped lang="scss">
 .player {
   position: fixed;
   bottom: 0;
-  height: 64px;
+  height: 70px;
   width: 100vw;
-
   background-color: #fff;
-  opacity: 0.85;
+  opacity: 0.9;
+  backdrop-filter: blur(20px);
 }
 
 .progress-bar {
-  height: 2px;
-  background-color: rgb(77, 58, 58);
-  &:hover {
-    height: 5px;
-  }
+  position: absolute;
+  width: 100%;
 }
 
 .controls {
