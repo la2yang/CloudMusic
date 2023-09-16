@@ -1,29 +1,27 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="props.playlist">
     <div
       class="cover"
-      style="background-image: url('src/assets/images/avatar.png')"
+      :style="{ backgroundImage: `url('${playlist.coverImgUrl}')` }"
     >
       <button class="play-button">
         <SvgIcon name="play"></SvgIcon>
       </button>
     </div>
     <div class="text">
-      <a class="title">歌单名称</a>
-      <div class="info">歌手,用户等</div>
+      <div class="title">{{ playlist.name }}</div>
+      <div class="info">by {{ playlist.creator.nickname }}</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import SvgIcon from './SvgIcon.vue'
-import ButtonIcon from './ButtonIcon.vue'
+const props = defineProps(['playlist'])
 </script>
 
 <style scoped lang="scss">
 .container {
   position: relative;
-  margin: 15px;
 }
 
 .cover {
@@ -31,13 +29,11 @@ import ButtonIcon from './ButtonIcon.vue'
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 200px;
-  width: 200px;
+  aspect-ratio: 1; /* 设置宽高比为1:1 */
   background: #fff;
   background-size: cover;
   border-radius: 15px;
   cursor: pointer;
-
   .play-button {
     display: flex;
     display: none;
@@ -93,16 +89,19 @@ import ButtonIcon from './ButtonIcon.vue'
   .title {
     font-size: 16px;
     font-weight: 600;
+    margin-bottom: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
     cursor: pointer;
     &:hover {
       text-decoration: underline;
     }
   }
   .info {
-    margin-top: 8px;
     font-size: 12px;
     font-weight: 400;
     opacity: 0.7;
+    margin-bottom: 2px;
   }
 }
 </style>

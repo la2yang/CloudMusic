@@ -44,12 +44,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import useUserStore from '@/store/user'
 
-import ButtonIcon from './ButtonIcon.vue'
 import SvgIcon from './SvgIcon.vue'
 import AvatarMenu from './AvatarMenu.vue'
 
+import useUserStore from '@/store/user'
+const userStore = useUserStore()
 // 搜索框聚焦
 let isFocused = ref(false)
 
@@ -65,8 +65,6 @@ const avatar = () => {
     'http://s4.music.126.net/style/web2/img/default/default_avatar.jpg?param=60y60'
   )
 }
-
-const userStore = useUserStore()
 </script>
 
 <style scoped lang="scss">

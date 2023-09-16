@@ -19,8 +19,14 @@
       </div>
       <!-- 12首喜欢音乐预览 -->
       <div class="liked-songs-list">
-        <div class="liked-song-item" v-for="index in 12" :key="index">
-          <img class="cover" :src="likedstore.songs[index].pic" />
+        <div
+          class="liked-song-item"
+          v-for="index in 12"
+          :key="index"
+          v-if="likedstore.songs[0]"
+          @dblclick.native="handleDoubleClick(index)"
+        >
+          <img class="cover" :src="likedstore.songs[index].pic || ''" />
           <div class="info">
             <div class="title">{{ likedstore.songs[index].name }}</div>
             <div class="singer">{{ likedstore.songs[index].singer }}</div>
@@ -28,6 +34,7 @@
         </div>
       </div>
     </div>
+    <!-- 收藏歌单界面 -->
     <div class="section-two">
       <div class="playlist-type">
         <ButtonIcon>歌单1</ButtonIcon>
@@ -45,15 +52,17 @@
 </template>
 
 <script setup lang="ts">
-import uselikedStore from '@/store/liked'
-import useUserStore from '@/store/user'
 import { userLikedSongsIDs, userPlaylist } from '@/api/user'
 import { getSongInfo } from '@/api/song'
 import { onBeforeMount } from 'vue'
+
+import uselikedStore from '@/store/liked'
+import useUserStore from '@/store/user'
+import usePlayerStore from '@/store/player'
 const likedstore = uselikedStore()
 const userStore = useUserStore()
+const playerStore = usePlayerStore()
 
-import ButtonIcon from '@/components/ButtonIcon.vue'
 import Cover from '@/components/Cover.vue'
 
 onBeforeMount(() => {
@@ -67,9 +76,13 @@ const getLiked = async () => {
   likedstore.playlists = lists.playlist
 
   const songsInfo: any = await getSongInfo(userLikedSongs.ids.join(','))
-  console.log(songsInfo.songs)
-
   likedstore.setLikedSongs(songsInfo.songs)
+}
+
+const handleDoubleClick = (index) => {
+  // 先暂停,仓库内更新实现监听isPlaying的值实现播放
+  playerStore.isPlaying = false
+  playerStore.setPlayerMusic(likedstore.songs[index])
 }
 </script>
 
@@ -168,6 +181,7 @@ h1 {
   padding: 0 5px;
   margin-right: 5px;
   border-radius: 8px;
+  user-select: none;
   img {
     height: 80%;
     margin-right: 5px;
@@ -214,7 +228,8 @@ h1 {
 }
 
 .playlists {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 每行5个盒子 */
+  gap: 20px 15px;
 }
 </style>

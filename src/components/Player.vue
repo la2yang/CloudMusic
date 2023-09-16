@@ -3,35 +3,40 @@
     <div class="progress-bar">
       <audio
         ref="audioPlayer"
+        :src="playerStore.url"
         @timeupdate="updateProgress"
-        src="http://m8.music.126.net/20230915234203/2cbf8e79f6b893a19bb4690804cf6182/ymusic/0fd6/4f65/43ed/a8772889f38dfcb91c04da915b301617.mp3"
       ></audio>
       <vue-slider
-        v-model="player.currentTime"
+        v-model="playerStore.currentTime"
         :min="0"
-        :max="120"
+        :max="playerStore.dt"
         :interval="1"
         :drag-on-click="true"
         :duration="0"
         :dot-size="12"
         :height="3"
+        :tooltip-formatter="formatTime"
+        @change="changeCurrentTime"
         style="margin-top: -6px"
-        :tooltip-formatter="null"
         :lazy="true"
         :silent="true"
       ></vue-slider>
     </div>
+
     <div class="controls">
       <div class="playing">
-        <img class="music-cover" src="@/assets/images/avatar.png" />
+        <img class="music-cover" :src="playerStore.pic" />
         <div class="music-info">
-          <a class="music-name">没有名字的夜晚</a>
-          <a class="singer">作者</a>
+          <a class="music-name">{{ playerStore.name }}</a>
+          <a class="singer">{{ playerStore.singer }}</a>
         </div>
-        <ButtonIcon class="like-icon" @click="player.isLiked = !player.isLiked">
+        <ButtonIcon
+          class="like-icon"
+          @click="playerStore.isLiked = !playerStore.isLiked"
+        >
           <SvgIcon
             class="heart"
-            :name="player.isLiked ? 'heart-solid' : 'heart'"
+            :name="playerStore.isLiked ? 'heart-solid' : 'heart'"
           ></SvgIcon>
         </ButtonIcon>
       </div>
@@ -39,12 +44,14 @@
         <ButtonIcon class="button-icon">
           <SvgIcon class="front" name="front"></SvgIcon>
         </ButtonIcon>
-        <ButtonIcon class="button-icon">
+        <ButtonIcon
+          class="button-icon"
+          @click="playerStore.isPlaying = !playerStore.isPlaying"
+        >
           <SvgIcon
             class="play"
-            :name="player.isPlaying ? 'play' : 'pause'"
+            :name="playerStore.isPlaying ? 'pause' : 'play'"
             :style="{ width: '24px', height: '24px' }"
-            @click="player.isPlaying = !player.isPlaying"
           ></SvgIcon>
         </ButtonIcon>
         <ButtonIcon class="button-icon">
@@ -61,18 +68,21 @@
         <ButtonIcon class="button-icon">
           <SvgIcon class="front" name="shuffle"></SvgIcon>
         </ButtonIcon>
-        <div class="volume-control">
-          <ButtonIcon class="button-icon">
-            <SvgIcon class="front" name="volume"></SvgIcon>
-          </ButtonIcon>
-          <div class="volume-slider">
-            <vue-slider
-              v-model="player.volume"
-              :min="0"
-              :max="100"
-              :interval="1"
-            ></vue-slider>
-          </div>
+        <ButtonIcon class="button-icon">
+          <SvgIcon class="front" name="volume"></SvgIcon>
+        </ButtonIcon>
+        <div class="volume-slider">
+          <vue-slider
+            v-model="player.volume"
+            :min="0"
+            :max="100"
+            :interval="1"
+            :drag-on-click="true"
+            :duration="0"
+            :dot-size="10"
+            :height="4"
+            @change="changeVolume"
+          ></vue-slider>
         </div>
         <ButtonIcon class="button-icon">
           <SvgIcon class="front" name="arrow-up"></SvgIcon>
@@ -86,40 +96,48 @@
 import '@/styles/slider.scss'
 import { reactive, ref, watch } from 'vue'
 
-import ButtonIcon from './ButtonIcon.vue'
 import VueSlider from 'vue-slider-component'
 
+import usePlayerStore from '@/store/player'
+const playerStore = usePlayerStore()
+
 const player = reactive({
-  // 是否喜爱
-  isLiked: true,
-  // 是否播放
-  isPlaying: false,
-  // 音量
-  volume: 10,
-  // 当前播放进度
-  currentTime: 0,
+  volume: 50,
 })
 
 const audioPlayer = ref(null)
 
-const playMusic = () => {
-  audioPlayer.value.play()
-}
-
-const pauseMusic = () => {
-  audioPlayer.value.pause()
-}
-
-watch(player, () => {
-  if (player.isPlaying) {
-    pauseMusic()
-  } else {
-    playMusic()
-  }
-})
+// 控制音乐播放
+watch(
+  () => playerStore.isPlaying,
+  () => {
+    if (!playerStore.isPlaying && playerStore.url) {
+      audioPlayer.value.pause()
+    } else {
+      audioPlayer.value.play()
+    }
+  },
+)
 
 const updateProgress = () => {
-  player.currentTime = audioPlayer.value.currentTime
+  playerStore.currentTime = audioPlayer.value.currentTime
+}
+
+const formatTime = (value) => {
+  const minutes = Math.floor(value / 60)
+  const seconds = Math.floor(value % 60)
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+}
+
+// 当滑块值改变时，更新音频播放时间
+const changeCurrentTime = (value) => {
+  playerStore.currentTime = value
+  audioPlayer.value.currentTime = playerStore.currentTime
+}
+
+const changeVolume = (value) => {
+  player.volume = value
+  audioPlayer.value.volume = player.volume / 100
 }
 </script>
 
@@ -140,8 +158,8 @@ const updateProgress = () => {
 }
 
 .controls {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  justify-content: space-between;
   height: 100%;
   padding: {
     right: 10vw;
@@ -218,15 +236,8 @@ const updateProgress = () => {
   display: flex;
   justify-content: right;
   align-items: center;
-}
-
-.volume-control {
-  display: flex;
-  align-items: center;
-  width: 100px;
-  margin-right: 5px;
   .volume-slider {
-    width: 100px;
+    width: 80px;
   }
 }
 </style>
