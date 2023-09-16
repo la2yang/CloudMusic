@@ -38,4 +38,14 @@ export default defineConfig({
       },
     },
   },
+
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://www.codeman.ink:3000',
+        changeOrigin: true, // 允许跨域
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
 })
