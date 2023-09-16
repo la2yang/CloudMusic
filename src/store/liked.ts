@@ -1,7 +1,7 @@
 // 用户喜欢的音乐
 import { defineStore } from 'pinia'
 
-type songType = {
+export type songType = {
   id: number
   name: string
   pic: string
@@ -25,14 +25,17 @@ const uselikedStore = defineStore('liked', {
   },
   actions: {
     async setLikedSongs(likedSons) {
+      const songs = []
       likedSons.forEach((item) => {
-        let song = []
-        song.id = item.id
-        song.name = item.name
-        song.pic = item.al.picUrl
-        song.singer = item.ar[0].name
-        this.songs.push(song)
+        let song: songType = {
+          id: item.id,
+          name: item.name,
+          pic: item.al.picUrl,
+          singer: item.ar[0].name,
+        }
+        songs.push(song)
       })
+      this.songs = songs
     },
 
     async setLikedPlaylists(playlists) {

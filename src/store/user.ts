@@ -1,6 +1,12 @@
 // 创建用户相关的小仓库
 import { defineStore } from 'pinia'
-import { User } from './type'
+
+export type User = {
+  userId: number
+  avatarUrl: string
+  nickname: string
+  userName: string
+}
 
 const cookie = localStorage.getItem('cookie')
 
