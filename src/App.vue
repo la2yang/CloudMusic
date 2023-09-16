@@ -1,16 +1,27 @@
 <template>
-  <navbar />
-  <div class="main">
-    <RouterView></RouterView>
-    <TrackItem />
+  <div>
+    <navbar />
+    <div class="main">
+      <RouterView></RouterView>
+    </div>
+    <Player />
   </div>
-  <Player />
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
+import useUserStore from '@/store/user'
+
 import Navbar from '@/components/Navbar.vue'
 import Player from '@/components/Player.vue'
-import TrackItem from '@/components/TrackItem.vue'
+
+const userStore = useUserStore()
+
+onMounted(() => {
+  if (localStorage.getItem('cookie')) {
+    userStore.setUserInfo(JSON.parse(localStorage.getItem('user')))
+  }
+})
 </script>
 
 <style scoped lang="scss">
