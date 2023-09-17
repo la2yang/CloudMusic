@@ -26,19 +26,21 @@
 
 <script setup lang="ts">
 import { ref, nextTick } from 'vue'
-import useUserStore from '@/store/user'
 
-import SvgIcon from './SvgIcon.vue'
 import Router from '@/router'
 
-const menu = ref()
-const showMenu = ref(true)
+import useUserStore from '@/store/user'
 const userStore = useUserStore()
 
+const menu = ref()
+const showMenu = ref(false)
+
+// 失去焦点关闭菜单(点击其他地方)
 const blurMenu = () => {
-  showMenu.value = true
+  showMenu.value = false
 }
 
+// 打开菜单时自动获取焦点
 const openMenu = () => {
   showMenu.value = !showMenu.value
   nextTick(() => {
