@@ -12,7 +12,7 @@
             <h1>我喜欢的音乐</h1>
             <h2>50首歌</h2>
           </div>
-          <button class="play-button">
+          <button class="play-button" @click="test">
             <SvgIcon name="play"></SvgIcon>
           </button>
         </div>
@@ -21,20 +21,24 @@
       <div class="liked-songs-list">
         <div
           class="liked-song-item"
-          v-for="index in 12"
-          :key="index"
-          v-if="likedstore.songs[0]"
-          @dblclick.native="handleDoubleClick(index)"
+          v-for="(song, index) in filteredLikedSongs"
+          :key="song.id"
+          @dblclick.native="handleDoubleClick(song)"
         >
-          <img class="cover" :src="likedstore.songs[index].pic || ''" />
-          <div class="info">
-            <div class="title">{{ likedstore.songs[index].name }}</div>
-            <div class="singer">{{ likedstore.songs[index].singer }}</div>
+          <!-- 根据有无url样式变灰 -->
+          <img
+            class="cover"
+            :src="song.pic || ''"
+            :style="song.url ? null : { filter: 'grayscale(100%)' }"
+          />
+          <div class="info" :style="song.url ? null : { color: '#B8B8B8' }">
+            <div class="title">{{ song.name }}</div>
+            <div class="singer">{{ song.singer }}</div>
           </div>
         </div>
       </div>
     </div>
-    <!-- 收藏歌单界面 -->
+    <!-- 收藏歌单界面: 未完成 -->
     <div class="section-two">
       <div class="playlist-type">
         <ButtonIcon>歌单1</ButtonIcon>
@@ -54,35 +58,54 @@
 <script setup lang="ts">
 import { userLikedSongsIDs, userPlaylist } from '@/api/user'
 import { getSongInfo } from '@/api/song'
-import { onBeforeMount } from 'vue'
-
-import uselikedStore from '@/store/liked'
-import useUserStore from '@/store/user'
-import usePlayerStore from '@/store/player'
-const likedstore = uselikedStore()
-const userStore = useUserStore()
-const playerStore = usePlayerStore()
+import {
+  computed,
+  onBeforeMount,
+  onMounted,
+  reactive,
+  ref,
+  watchEffect,
+} from 'vue'
 
 import Cover from '@/components/Cover.vue'
+
+import useLikedStore, { songType } from '@/store/liked'
+import useUserStore from '@/store/user'
+import usePlayerStore from '@/store/player'
+const likedstore = useLikedStore()
+const userStore = useUserStore()
+const playerStore = usePlayerStore()
 
 onBeforeMount(() => {
   getLiked()
 })
 
-// 进入该页面时获取喜欢的音乐以及歌单保存至仓库
+// 进入该页面时获取喜欢的音乐和歌单保存至仓库
 const getLiked = async () => {
-  const userLikedSongs: any = await userLikedSongsIDs(userStore.user.userId)
-  const lists: any = await userPlaylist(userStore.user.userId)
-  likedstore.playlists = lists.playlist
+  try {
+    const userLikedSongs: any = await userLikedSongsIDs(userStore.user.userId)
+    const lists: any = await userPlaylist(userStore.user.userId)
+    likedstore.playlists = lists.playlist
 
-  const songsInfo: any = await getSongInfo(userLikedSongs.ids.join(','))
-  likedstore.setLikedSongs(songsInfo.songs)
+    const songsInfo: any = await getSongInfo(userLikedSongs.ids.join(','))
+    likedstore.setLikedSongs(songsInfo.songs)
+  } catch (error) {
+    console.error('Error fetching liked songs and playlists:', error)
+  }
 }
 
-const handleDoubleClick = (index) => {
+// 需要展示的12首歌
+let filteredLikedSongs = reactive([])
+filteredLikedSongs = likedstore.songs.slice(0, 12)
+
+const handleDoubleClick = (song) => {
   // 先暂停,仓库内更新实现监听isPlaying的值实现播放
   playerStore.isPlaying = false
-  playerStore.setPlayerMusic(likedstore.songs[index])
+  playerStore.setPlayerMusic(song)
+}
+
+const test = () => {
+  console.log(filteredLikedSongs)
 }
 </script>
 

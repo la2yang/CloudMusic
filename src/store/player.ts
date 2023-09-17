@@ -1,6 +1,5 @@
 // 正在播放的歌曲
 import { defineStore } from 'pinia'
-import { getSongInfo, getMP3 } from '@/api/song'
 
 // 当前播放的歌曲
 const usePlayerStore = defineStore('player', {
@@ -22,19 +21,17 @@ const usePlayerStore = defineStore('player', {
     }
   },
   actions: {
-    async setPlayerMusic(songsInfo) {
-      const MP3: any = await getMP3(songsInfo.id)
-      const info: any = await getSongInfo(songsInfo.id)
-      this.id = songsInfo.id
-      this.name = songsInfo.name
-      this.url = MP3.data[0].url
-      this.pic = songsInfo.pic
-      this.singer = songsInfo.singer
+    async setPlayerMusic(songInfo) {
+      this.id = songInfo.id
+      this.name = songInfo.name
+      this.url = songInfo.url
+      this.pic = songInfo.pic
+      this.singer = songInfo.singer
       this.isLiked = true
       this.isPlaying = true
       this.currentTime = 0
       // 小数使进度条显示出错
-      this.dt = Math.floor(info.songs[0].dt / 1000)
+      this.dt = songInfo.dt
     },
   },
   getters: {},
