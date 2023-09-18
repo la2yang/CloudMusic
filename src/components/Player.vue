@@ -84,8 +84,8 @@
             @change="changeVolume"
           ></vue-slider>
         </div>
-        <ButtonIcon class="button-icon">
-          <SvgIcon class="front" name="arrow-up"></SvgIcon>
+        <ButtonIcon class="button-icon" @click="showLyrics">
+          <SvgIcon class="arrow-up" name="arrow-up"></SvgIcon>
         </ButtonIcon>
       </div>
     </div>
@@ -95,6 +95,8 @@
 <script setup lang="ts">
 import '@/styles/slider.scss'
 import { reactive, ref, watch } from 'vue'
+import { getLyric } from '@/api/song'
+import switchLyric from '@/utils/lyric'
 
 import VueSlider from 'vue-slider-component'
 
@@ -118,11 +120,12 @@ watch(
     }
   },
 )
-
+// 进度条更新
 const updateProgress = () => {
   playerStore.currentTime = audioPlayer.value.currentTime
 }
 
+// 改变实现显示
 const formatTime = (value) => {
   const minutes = Math.floor(value / 60)
   const seconds = Math.floor(value % 60)
@@ -135,9 +138,18 @@ const changeCurrentTime = (value) => {
   audioPlayer.value.currentTime = playerStore.currentTime
 }
 
+// 调整时间
 const changeVolume = (value) => {
   player.volume = value
   audioPlayer.value.volume = player.volume / 100
+}
+// 展开歌词界面
+const showLyrics = async () => {
+  playerStore.showLyrics = !playerStore.showLyrics
+
+  // 获取歌词
+  const result: any = await getLyric(playerStore.id)
+  playerStore.lyrics = switchLyric(result.lrc.lyric)
 }
 </script>
 
@@ -150,6 +162,7 @@ const changeVolume = (value) => {
   background-color: #fff;
   opacity: 0.9;
   backdrop-filter: blur(20px);
+  z-index: 200;
 }
 
 .progress-bar {
@@ -177,7 +190,7 @@ const changeVolume = (value) => {
 }
 .playing {
   display: flex;
-  display: flex;
+  flex: 1;
   align-items: center;
 }
 .music-cover {
@@ -229,15 +242,18 @@ const changeVolume = (value) => {
 
 .middle-control-button {
   display: flex;
+  flex: 1;
   justify-content: center;
   align-items: center;
 }
 .right-control-button {
   display: flex;
+  flex: 1;
   justify-content: right;
   align-items: center;
   .volume-slider {
     width: 80px;
+    margin-right: 5px;
   }
 }
 </style>

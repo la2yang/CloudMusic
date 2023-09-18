@@ -18,6 +18,9 @@ const usePlayerStore = defineStore('player', {
       currentTime: 0,
       // 歌曲时长
       dt: 0,
+      showLyrics: false,
+      lyrics: [],
+      list: '',
     }
   },
   actions: {
@@ -32,6 +35,7 @@ const usePlayerStore = defineStore('player', {
       this.currentTime = 0
       // 小数使进度条显示出错
       this.dt = songInfo.dt
+      this.list = songInfo.list
     },
   },
   getters: {},

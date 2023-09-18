@@ -93,6 +93,14 @@ video {
   padding: 0;
   vertical-align: baseline;
   border: 0;
+
+  ::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  ::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0;
+  }
 }
 
 article,

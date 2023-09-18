@@ -9,6 +9,8 @@ export type songType = {
   singer: string
   url: string
   dt: number
+  // 专辑
+  list: string
 }
 
 // 定义 state 的类型
@@ -38,6 +40,7 @@ const useLikedStore = defineStore('liked', {
           singer: item.ar[0].name,
           url: MP3.data[0].url,
           dt: Math.floor(item.dt / 1000),
+          list: item.al.name,
         }
         songs.push(song)
       })
