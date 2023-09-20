@@ -58,14 +58,7 @@
 <script setup lang="ts">
 import { userLikedSongsIDs, userPlaylist } from '@/api/user'
 import { getSongInfo } from '@/api/song'
-import {
-  computed,
-  onBeforeMount,
-  onMounted,
-  reactive,
-  ref,
-  watchEffect,
-} from 'vue'
+import { onBeforeMount, reactive } from 'vue'
 
 import Cover from '@/components/Cover.vue'
 
