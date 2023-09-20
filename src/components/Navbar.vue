@@ -114,9 +114,6 @@ const avatar = () => {
     text-decoration: none;
     border-radius: 6px;
     color: black;
-    ButtonIcon {
-      font-weight: 700;
-    }
   }
 }
 

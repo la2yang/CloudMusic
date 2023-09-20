@@ -1,13 +1,13 @@
 <template>
   <div>
-    <button class="button-icon"><slot></slot></button>
+    <div class="button-icon"><slot></slot></div>
   </div>
 </template>
 
 <script setup lang="ts"></script>
 
 <style lang="scss" scoped>
-button {
+.button-icon {
   display: flex;
   justify-content: center;
   align-items: center;
